@@ -15,9 +15,7 @@ const registerController = async (req, res) => {
       email,
       firstName,
       lastName,
-      age,
-      photoUrl,
-      createdAt,
+      age
     } = req.body;
 
     bcrypt.genSalt(13, function (err, salt) {
@@ -29,10 +27,8 @@ const registerController = async (req, res) => {
             email,
             firstName,
             lastName,
-            age,
-            photoUrl,
-            createdAt,
-          });
+            age
+                      });
           if (result === null) {
             res
               .status(200)
@@ -57,16 +53,16 @@ const loginController = async (req, res) => {
     const { email, password } = req.body;
     const hashpassword = await getUserByEmailAndPasswordService(email);
     if (!hashpassword) {
-      res.status(404).json({ message: "User not found.", ok: false });
+      res.status(200).json({ message: "User not found.", ok: false });
     } else {
       bcrypt.compare(password, hashpassword[0].password, function (err, result) {
         if (result) {
           const token = generateToken({
-            id: hashpassword[0].idUser,
+            id: hashpassword[0].id,
             email: hashpassword[0].email,
           },10*1000);
           const refreshtoken = generateToken({
-            id: hashpassword[0].idUser,
+            id: hashpassword[0].id,
             email: hashpassword[0].email,
           },10*1000);
           res
@@ -94,7 +90,7 @@ const loginController = async (req, res) => {
       });
     }
   } catch (error) {
-    res.status(500).json({ error: error?.message ? error.message : error });
+    res.status(200).json({ error: error?.message ? error.message : error });
   }
 };
 

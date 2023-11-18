@@ -1,14 +1,14 @@
 const db = require("../database-mysql/index");
-const addUserService = async (userData) => {
+const addProductService = async (productData) => {
   return new Promise(async (resolve, reject) => {
-    const query = "INSERT INTO users (userName,password,email,firstName,lastName,age) VALUES (?)";
+    const query = "INSERT INTO products (title,image,description,price,quantity,cat_id) VALUES (?)";
     const values = [
-      userData.userName,
-      userData.password,
-      userData.email,
-      userData.firstName,
-      userData.lastName,
-      userData.age
+      productData.title,
+      productData.image,
+      productData.description,
+      productData.price,
+      productData.quantity,
+      productData.cat_id
     ];
     db.query(query, [values], (error, results) => {
       if (error) {
@@ -23,10 +23,10 @@ const addUserService = async (userData) => {
     });
   });
 };
-const updateUserService = async (idUser,fieldsToUpdate) => {
+const updateProductService = async (idProduct,fieldsToUpdate) => {
   return new Promise(async (resolve, reject) => {
-    const query = "UPDATE users SET ? WHERE idUser = ?";
-    db.query(query, [fieldsToUpdate, idUser], (error, results) => {
+    const query = "UPDATE products SET ? WHERE idProduct = ?";
+    db.query(query, [fieldsToUpdate, idProduct], (error, results) => {
       if (error) {
         reject(error);
       } else {
@@ -39,9 +39,9 @@ const updateUserService = async (idUser,fieldsToUpdate) => {
     });
   });
 };
-const getUserByIdService = async (id) => {
+const getProductByIdCategoryService = async (id) => {
   return new Promise(async (resolve, reject) => {
-    const query = "SELECT * FROM users WHERE id = ?";
+    const query = "SELECT * FROM products WHERE cat_id = ?";
     db.query(query, [id], (error, results) => {
       if (error) {
         reject(error);
@@ -55,25 +55,10 @@ const getUserByIdService = async (id) => {
     });
   });
 };
-const getUserByEmailAndPasswordService = async (email) => {
+
+const getAllProductService = async () => {
   return new Promise(async (resolve, reject) => {
-    const query = "SELECT * FROM users WHERE email = ?";
-    db.query(query, [email], (error, results) => {
-      if (error) {
-        reject(error);
-      } else {
-        if (results.length === 0) {
-          resolve(null);
-        } else {
-          resolve(results);
-        }
-      }
-    });
-  });
-};
-const getAllUserService = async () => {
-  return new Promise(async (resolve, reject) => {
-    const query = "SELECT * FROM users";
+    const query = "SELECT * FROM products";
     db.query(query, (error, results) => {
       if (error) {
         reject(error);
@@ -87,9 +72,9 @@ const getAllUserService = async () => {
     });
   });
 };
-const deleteUserByIdService = async (id) => {
+const deleteProductByIdService = async (id) => {
   return new Promise(async (resolve, reject) => {
-    const query = "DELETE users WHERE id = ?";
+    const query = "DELETE products WHERE id = ?";
     db.query(query, [id], (error, result) => {
       if (error) {
         reject(error);
@@ -105,11 +90,9 @@ const deleteUserByIdService = async (id) => {
 };
 
 module.exports = {
-  addUserService,
-  updateUserService,
-  getUserByIdService,
-  getAllUserService,
-  deleteUserByIdService,
-  getUserByEmailAndPasswordService
-
+  addProductService,
+  updateProductService,
+  getProductByIdCategoryService,
+  getAllProductService,
+  deleteProductByIdService,
 };
